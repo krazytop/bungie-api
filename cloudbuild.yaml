@@ -15,7 +15,6 @@ steps:
       - '-Dsonar.projectKey=${_SONAR_PROJECT_KEY}'
       - '-Dsonar.organization=${_SONAR_ORGANIZATION}'
       - '-Dsonar.host.url=${_SONAR_HOST_URL}'
-      - '-Dsonar.sources=.'
     secretEnv:
       - 'SONAR_TOKEN'
     waitFor: ['run-maven-tests']

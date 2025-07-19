@@ -36,14 +36,6 @@
 
         <sonar.organization>krazytop</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.projectKey>krazytop_bungie-api</sonar.projectKey>
-        <sonar.sources>src/main/java</sonar.sources>
-        <sonar.tests>src/test/java</sonar.tests>
-        <sonar.java.binaries>target/classes</sonar.java.binaries>
-        <sonar.exclusions>
-            **/target/**,
-            **/*.jar
-        </sonar.exclusions>
     </properties>
 
     <dependencies>
