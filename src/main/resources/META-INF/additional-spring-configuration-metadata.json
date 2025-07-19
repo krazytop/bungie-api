@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "bungie.client_id",
+      "type": "java.lang.String",
+      "description": "Client Id for Bungie APIs."
+    },
+    {
+      "name": "bungie.client_secret",
+      "type": "java.lang.String",
+      "description": "Client secret for Bungie APIs."
+    }
+] }

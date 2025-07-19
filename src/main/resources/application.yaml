@@ -1,0 +1,11 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: bungie-api
+  web:
+    resources:
+      add-mappings: false
+bungie:
+  client_id: ${BUNGIE_CLIENT_ID}
+  client_secret: ${BUNGIE_CLIENT_SECRET}

@@ -1,0 +1,132 @@
+openapi: 3.0.0
+info:
+  title: Global API Gateway
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local Development API Gateway
+  - url: https://api.krazytop.com
+    description: Production API Gateway
+
+tags:
+  - name: Authentification
+    description: Operations related to authentication.
+
+paths:
+  /auth/{code}:
+    get:
+      summary: Retrieve Bungie player tokens
+      operationId: getPlayerTokens
+      tags:
+        - Authentification
+      parameters:
+        - in: path
+          name: code
+          schema:
+            type: string
+          required: true
+          description: The authorization code received from Bungie.net.
+      responses:
+        '200':
+          description: Player tokens successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokensDTO'
+        '500':
+          description: Internal Server Error or IO Error when communicating with Bungie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDTO'
+  /auth:
+    post:
+      summary: Update Bungie player tokens.
+      operationId: updatePlayerTokens
+      tags:
+        - Authentification
+      requestBody:
+        required: true
+        description: Player tokens to refresh.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthTokensDTO'
+      responses:
+        '200':
+          description: Player tokens successfully refreshed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokensDTO'
+        '500':
+          description: Internal Server Error or IO Error when communicating with Bungie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDTO'
+
+components:
+  schemas:
+    ApiErrorDTO:
+      type: object
+      description: |
+        Represents a standardized error response returned by the API when a request
+        cannot be processed successfully. It provides a machine-readable code,
+        a human-readable message, and optional detailed information for specific issues.
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: A unique, application-specific error code.
+          example: "INVALID_INPUT"
+        message:
+          type: string
+          description: A human-readable error message that provides a brief explanation of the error.
+          example: "The provided 'date' parameter has an invalid format."
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: The name of the field that caused the error.
+                example: "date"
+              issue:
+                type: string
+                description: A specific issue with the field.
+                example: "must respect the format"
+          description: A list of specific validation errors.
+    AuthTokensDTO:
+      type: object
+      description: |
+        Represents Bungie authentification tokens containing access and refresh tokens,
+        along with expiration information and the membership ID.
+      required:
+        - accessToken
+        - refreshToken
+        - accessTokenExpiresAt
+        - refreshTokenExpiresAt
+      properties:
+        accessToken:
+          type: string
+          description: The access token used to authenticate future API requests.
+          example: "CKy1BxKGAgAgHxlqkdJcDjAJ3Dkh4ILp3ddvxxqnBpj+YJDm++dhWNDgAAAAqJgWwVRarfCcmdKvQUi6A9tHfETM3NjLhQuWou6+YdLaUFq8Jp3cibIj+xUNqc8k3i3RsU0E6hJmYrblrZ6Z6DcUmFW9SgpIaIxuB4BU15VJUmnmDNxXRntelyctsC++fY0HLdICV+9aEK7VmQHCO0j3TYrRMf2aof7lS59ct821K48DEVg8KdLEOMvOPoX6ohW/TV7wbJLXpSnhrzS2TnanzMIyycJJHqTu1zcGaJ5iOnEL6oIRKN0bJRl23tJdgXH+dJlIOKoB+1QcGAxZdqkjGdI8TGYAf9pBVl0aJsM="
+        accessTokenExpiresAt:
+          type: string
+          format: date-time
+          description: The expiration date of the access token.
+          example: "2023-10-27T10:00:00Z"
+        refreshToken:
+          type: string
+          description: The refresh token used to obtain a new access token.
+          example: "CKy1BxKGAgAgf5vy8riRnThQj+l79abfpE/2rIL/CAMy4DSJXdZ3fH7gAAAAEGCNeHJQIOOGTwDDzQfOVybHsiVJhJoLgCfsUdH6PslsiNNfN+Ba2aG2b8ibOqYOvFKm0BqAUx6PQhusbgjOIeCs+rPViOJ5HQfId/aFaJ1GpSMrV9tw7xAGVPFZzVZ/xjv3mF4f+thMq9MQD6VuxqCa8BBXvplWlDX/CluYEinqZlXpDABgAanj2O5nkuu1AubLy3f0Jdt8mjr8ikPmA2DAE44mnhtSLcJF49rAa7/z0VYDRK94nMjjLrI8t+cOeCJNUpSrexbx4CQXUo5TaOmtQquIpl/APwYqh44Bnh4="
+        refreshTokenExpiresAt:
+          type: string
+          format: date-time
+          description: The expiration date of the refresh token.
+          example: "2023-10-27T10:00:00Z"
